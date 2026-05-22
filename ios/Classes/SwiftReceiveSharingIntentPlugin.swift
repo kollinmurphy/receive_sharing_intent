@@ -7,7 +7,7 @@ public let kUserDefaultsKey = "ShareKey"
 public let kUserDefaultsMessageKey = "ShareMessageKey"
 public let kAppGroupIdKey = "AppGroupId"
 
-public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
     static let kMessagesChannel = "receive_sharing_intent/messages"
     static let kEventsChannelMedia = "receive_sharing_intent/events-media"
     
@@ -42,6 +42,7 @@ public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterSt
         if registrar.responds(to: selector) {
             registrar.perform(selector, with: instance)
         }
+        registrar.addSceneDelegate(instance)
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -121,7 +122,37 @@ public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterSt
         }
         return false
     }
-    
+
+    public func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions?) -> Bool {
+        guard let connectionOptions = connectionOptions else { return false }
+        if let urlContext = connectionOptions.urlContexts.first,
+           hasMatchingSchemePrefix(url: urlContext.url) {
+            return handleUrl(url: urlContext.url, setInitialData: true)
+        }
+        for userActivity in connectionOptions.userActivities {
+            if let url = userActivity.webpageURL, hasMatchingSchemePrefix(url: url) {
+                return handleUrl(url: url, setInitialData: true)
+            }
+        }
+        return false
+    }
+
+    public func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) -> Bool {
+        for urlContext in URLContexts {
+            if hasMatchingSchemePrefix(url: urlContext.url) {
+                return handleUrl(url: urlContext.url, setInitialData: false)
+            }
+        }
+        return false
+    }
+
+    public func scene(_ scene: UIScene, continue userActivity: NSUserActivity) -> Bool {
+        if let url = userActivity.webpageURL, hasMatchingSchemePrefix(url: url) {
+            return handleUrl(url: url, setInitialData: true)
+        }
+        return false
+    }
+
     private func handleUrl(url: URL?, setInitialData: Bool) -> Bool {
         let appGroupId = Bundle.main.object(forInfoDictionaryKey: kAppGroupIdKey) as? String
         let defaultGroupId = "group.\(Bundle.main.bundleIdentifier!)"
