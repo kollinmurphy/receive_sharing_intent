@@ -113,11 +113,11 @@ public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterSt
     public func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions?) -> Bool {
         guard let connectionOptions = connectionOptions else { return false }
         if let urlContext = connectionOptions.urlContexts.first,
-           hasSameSchemePrefix(url: urlContext.url) {
+           hasMatchingSchemePrefix(url: urlContext.url) {
             return handleUrl(url: urlContext.url, setInitialData: true)
         }
         for userActivity in connectionOptions.userActivities {
-            if let url = userActivity.webpageURL, hasSameSchemePrefix(url: url) {
+            if let url = userActivity.webpageURL, hasMatchingSchemePrefix(url: url) {
                 return handleUrl(url: url, setInitialData: true)
             }
         }
@@ -126,7 +126,7 @@ public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterSt
 
     public func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) -> Bool {
         for urlContext in URLContexts {
-            if hasSameSchemePrefix(url: urlContext.url) {
+            if hasMatchingSchemePrefix(url: urlContext.url) {
                 return handleUrl(url: urlContext.url, setInitialData: false)
             }
         }
@@ -134,7 +134,7 @@ public class SwiftReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterSt
     }
 
     public func scene(_ scene: UIScene, continue userActivity: NSUserActivity) -> Bool {
-        if let url = userActivity.webpageURL, hasSameSchemePrefix(url: url) {
+        if let url = userActivity.webpageURL, hasMatchingSchemePrefix(url: url) {
             return handleUrl(url: url, setInitialData: true)
         }
         return false
