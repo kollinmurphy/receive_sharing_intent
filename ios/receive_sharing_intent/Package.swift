@@ -21,6 +21,10 @@ let package = Package(
                 .product(name: "FlutterFramework", package: "FlutterFramework")
             ],
             resources: [
+                .process("PrivacyInfo.xcprivacy"),
+            ],
+            cSettings: [
+                .headerSearchPath("include/receive_sharing_intent")
             ]
         )
     ]
