@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import Photos
+import receive_sharing_intent_core
 
 public class ReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
     static let kMessagesChannel = "receive_sharing_intent/messages"
