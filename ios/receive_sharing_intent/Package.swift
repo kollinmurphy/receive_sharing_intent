@@ -9,8 +9,13 @@ let package = Package(
         .iOS("14.0")
     ],
     products: [
-        .library(name: "receive-sharing-intent-core", targets: ["receive_sharing_intent_core"]),
-        .library(name: "receive-sharing-intent", targets: ["receive_sharing_intent"])
+        .library(
+            name: "receive-sharing-intent",
+            targets: [
+                "receive_sharing_intent",
+                "receive_sharing_intent_core"
+            ]
+        )
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework")
