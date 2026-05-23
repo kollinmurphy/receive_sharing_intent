@@ -2,11 +2,6 @@ import Flutter
 import UIKit
 import Photos
 
-public let kSchemePrefix = "ShareMedia"
-public let kUserDefaultsKey = "ShareKey"
-public let kUserDefaultsMessageKey = "ShareMessageKey"
-public let kAppGroupIdKey = "AppGroupId"
-
 public class ReceiveSharingIntentPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
     static let kMessagesChannel = "receive_sharing_intent/messages"
     static let kEventsChannelMedia = "receive_sharing_intent/events-media"
