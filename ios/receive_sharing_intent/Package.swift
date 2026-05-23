@@ -25,6 +25,10 @@ let package = Package(
                 "receive_sharing_intent_core",
                 .product(name: "FlutterFramework", package: "FlutterFramework")
             ],
+            linkerSettings: [
+                .linkedFramework("Flutter"),
+                .unsafeFlags(["-ObjC"])
+            ],
             resources: [
                 .process("PrivacyInfo.xcprivacy"),
             ]
