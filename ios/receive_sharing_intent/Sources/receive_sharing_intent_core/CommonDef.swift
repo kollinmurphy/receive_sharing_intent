@@ -1,4 +1,4 @@
-import UIKit
+import UniformTypeIdentifiers
 
 public let kSchemePrefix = "ShareMedia"
 public let kUserDefaultsKey = "ShareKey"

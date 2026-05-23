@@ -12,10 +12,15 @@ A flutter plugin that enables flutter apps to receive sharing photos from other 
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Kasem' => 'kasem.jaffer@gmail.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'receive_sharing_intent/Sources/receive_sharing_intent/**/*.swift'
+  s.source_files = [
+    'receive_sharing_intent/Sources/receive_sharing_intent/**/*.swift',
+    'receive_sharing_intent/Sources/receive_sharing_intent_core/**/*.swift'
+  ]
+  s.resources = [
+    'receive_sharing_intent/Sources/receive_sharing_intent/PrivacyInfo.xcprivacy'
+  ]
   s.dependency 'Flutter'
   # Xcode 26 workaround for "module not found" errors
   s.user_target_xcconfig = { 'SWIFT_ENABLE_EXPLICIT_MODULES' => 'NO' }
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '14.0'
 end
-
