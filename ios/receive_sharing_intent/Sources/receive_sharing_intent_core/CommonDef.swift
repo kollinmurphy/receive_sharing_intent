@@ -6,12 +6,12 @@ public let kUserDefaultsMessageKey = "ShareMessageKey"
 public let kAppGroupIdKey = "AppGroupId"
 
 public class SharedMediaFile: Codable {
-    var path: String
-    var mimeType: String?
-    var thumbnail: String? // video thumbnail
-    var duration: Double? // video duration in milliseconds
-    var message: String? // post message
-    var type: SharedMediaType
+    public var path: String
+    public var mimeType: String?
+    public var thumbnail: String? // video thumbnail
+    public var duration: Double? // video duration in milliseconds
+    public var message: String? // post message
+    public var type: SharedMediaType
     
     
     public init(
