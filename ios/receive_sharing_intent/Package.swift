@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "receive_sharing_intent",
     platforms: [
-        .iOS("12.0")
+        .iOS("13.0")
     ],
     products: [
         .library(name: "receive-sharing-intent", targets: ["receive_sharing_intent"])

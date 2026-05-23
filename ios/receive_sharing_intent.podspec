@@ -16,6 +16,6 @@ A flutter plugin that enables flutter apps to receive sharing photos from other 
   s.dependency 'Flutter'
   # Xcode 26 workaround for "module not found" errors
   s.user_target_xcconfig = { 'SWIFT_ENABLE_EXPLICIT_MODULES' => 'NO' }
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
 end
 
