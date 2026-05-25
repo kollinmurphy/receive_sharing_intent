@@ -12,9 +12,9 @@ import Photos
 
 @available(swift, introduced: 5.0)
 open class RSIShareViewController: SLComposeServiceViewController {
-    var hostAppBundleIdentifier = ""
-    var appGroupId = ""
-    var sharedMedia: [SharedMediaFile] = []
+    open var hostAppBundleIdentifier = ""
+    open var appGroupId = ""
+    open var sharedMedia: [SharedMediaFile] = []
 
     /// Override this method to return false if you don't want to redirect to host app automatically
     /// Default is true
