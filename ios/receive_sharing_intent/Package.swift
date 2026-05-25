@@ -34,9 +34,6 @@ let package = Package(
             resources: [
                 .process("PrivacyInfo.xcprivacy"),
             ],
-            swiftSettings: [
-                .unsafeFlags(["-Xlinker", "-ObjC"])
-            ],
         )
     ]
 )
