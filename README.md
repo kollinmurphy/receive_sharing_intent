@@ -214,7 +214,7 @@ Make sure the deployment target for Runner.app and the share extension is the sa
 ```
 
 
-#### 5. Add the following to your [ios/Podfile](./example/ios/Podfile):
+#### 5. Add the following to your [ios/Podfile](./example/ios/Podfile) (Skip if using SPM):
 ```ruby
 ...
 target 'Runner' do
@@ -244,10 +244,7 @@ end
 
 
 ```swift
-// If you get no such module 'receive_sharing_intent' error. 
-// Go to Build Phases of your Runner target and
-// move `Embed Foundation Extension` to the top of `Thin Binary`. 
-import receive_sharing_intent
+import receive_sharing_intent_core
 
 class ShareViewController: RSIShareViewController {
       
@@ -259,6 +256,78 @@ class ShareViewController: RSIShareViewController {
     
 }
 ```
+
+#### 9. SPM only : Add `receive-sharing-intent-core` to Share Extension linked libraries
+
+Go to Xcode, Share Extension target, and add `receive-sharing-intent-core` to `Link Binary With Libraries`.
+![Linker config](./docs/xcode_share_extension_linker_config.png)
+
+NOTE: Xcode 26.5 does not provide an option to add individual libraries to the `Link Binary With Libraries` list as Flutter dependencies get added indirectly via `FlutterGeneratedPluginSwiftPackage` library in the Runner target. As a workaround, we would have to hack the `project.pbxproj`.
+
+##### Method 1:
+1. Save/Commit your existing `project.pbxproj` file as we are about to hack it.
+2. Open `project.pbxproj` in your code editor:
+   * Near the very top section of the file, under the `/* Begin PBXBuildFile section */` section, look for the `Pods_Share_Extension.framework` line, similar to this: `09D218251211A699B4AA483B /* Pods_Share_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF4A0BD33E6A264276A1571 /* Pods_Share_Extension.framework */; };`. Note that the `09D218251211A699B4AA483B` UUID will be different on your file.
+   * Add `ABB2BA8E2FC3D9B2006A33F4 /* receive-sharing-intent-core in Frameworks */ = {isa = PBXBuildFile; productRef = ABB2BA8D2FC3D9B2006A33F4 /* receive-sharing-intent-core */; };` immediately after the `Pods_Share_Extension.framework` line.
+   * Look for the `09D218251211A699B4AA483B` UUID under `/* Begin PBXFrameworksBuildPhase section */` section. Add `ABB2BA8E2FC3D9B2006A33F4 /* receive-sharing-intent-core in Frameworks */,` immediately after the `09D218251211A699B4AA483B /* Pods_Share_Extension.framework in Frameworks */,` line, within the same `files` list.
+   * Look for the `/* Begin XCSwiftPackageProductDependency section */` section. Add `ABB2BA8D2FC3D9B2006A33F4 /* receive-sharing-intent-core */ = { isa = XCSwiftPackageProductDependency; productName = "receive-sharing-intent-core"; };`. See below example.
+
+`/* Begin PBXFrameworksBuildPhase section */` section should look something like this:
+```
+/* Begin PBXFrameworksBuildPhase section */
+		97C146EB1CF9000F007C117D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */,
+				605756DC43B9873876970C7A /* Pods_Runner.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB53D6682EC9E8D3000521E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABB2BA8E2FC3D9B2006A33F4 /* receive-sharing-intent-core in Frameworks */,
+				09D218251211A699B4AA483B /* Pods_Share_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+```
+
+`/* Begin XCSwiftPackageProductDependency section */` section should look something like this:
+```
+/* Begin XCSwiftPackageProductDependency section */
+		78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FlutterGeneratedPluginSwiftPackage;
+		};
+		ABB2BA8D2FC3D9B2006A33F4 /* receive-sharing-intent-core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "receive-sharing-intent-core";
+		};
+/* End XCSwiftPackageProductDependency section */
+```
+
+
+##### Method 2:
+1. Save/Commit your existing `project.pbxproj` file as we are about to hack it.
+2. Clone this repository to your local drive.
+3. In Xcode, go to Share Extension target -> `Link Binary With Libraries`. Click on the "Add items" plus icon -> "Add Other..." -> "Add Package Dependency..." -> "Add Local...". Select `receive_sharing_intent/ios/receive_sharing_intent` directory. Xcode will throw a warning about duplicated library. Ignore the warning and select "Add anyway". Select `receive-sharing-intent-core` to add to Share Extension only.
+4. Open `project.pbxproj` in your code editor, delete all sections that contain `"../../receive_sharing_intent/ios/receive_sharing_intent"`, such as
+```
+`ABB2BA8C2FC3D9B2006A33F4 /* XCLocalSwiftPackageReference "../../receive_sharing_intent/ios/receive_sharing_intent" */,`
+```
+and 
+```
+ABB2BA8C2FC3D9B2006A33F4 /* XCLocalSwiftPackageReference "../../receive_sharing_intent/ios/receive_sharing_intent" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../receive_sharing_intent/ios/receive_sharing_intent;
+		};
+```
+
+
 
 #### Compiling issues and their fixes
 
