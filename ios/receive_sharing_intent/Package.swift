@@ -11,10 +11,11 @@ let package = Package(
     products: [
         .library(
             name: "receive-sharing-intent",
-            targets: [
-                "receive_sharing_intent",
-                "receive_sharing_intent_core"
-            ]
+            targets: ["receive_sharing_intent"]
+        ),
+        .library(
+            name: "receive-sharing-intent-core",
+            targets: ["receive_sharing_intent_core"]
         )
     ],
     dependencies: [
